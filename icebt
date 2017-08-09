@@ -2,7 +2,7 @@
 
 # If no commands, show credits
 if [ $# == 0 ]; then
-    cat ./.credits
+    cat ./.cli/credits
     exit 0
 else
 
