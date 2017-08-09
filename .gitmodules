@@ -2,3 +2,7 @@
 	path = www
 	url = https://github.com/Goon3r/iceWeb.git
 	branch = master
+[submodule "env/src/iceMika"]
+	path = env/src/iceMika
+	url = https://github.com/Goon3r/iceMika.git
+	branch = master
