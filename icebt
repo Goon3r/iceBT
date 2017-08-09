@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+# If no commands, show credits
+if [ $# == 0 ]; then
+    cat ./.credits
+    exit 0
+else
+
+    # If a start command, run the docker-compose up commnad
+    if [ $1 == 'start' ]; then
+        shift 1
+        docker-compose up $@
+        exit 0
+    fi
+
+    # If a stop command, run the docker-compose up commnad
+    if [ $1 == 'stop' ]; then
+        shift 1
+        docker-compose down $@
+        exit 0
+    fi
+
+    # If a rebuild command, run the docker-compose build command with no cache
+    # option set against it.
+    if [ $1 == 'rebuild' ]; then
+        shift 1
+        docker-compose build --no-cache $@
+        exit 0
+    fi
+
+    # If a composer command is ran route it to the composer container and run it
+    if [ $1 == 'composer' ]; then
+        shift 1
+        docker-compose run composer $@
+        exit 0
+    fi
+
+    docker-compose $@
+    exit 0
+fi
