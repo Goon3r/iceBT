@@ -4,9 +4,9 @@ version: '3'
 
 services:
     nginx:
-        image: nginx:1-alpine
+        image: nginx:${NGINX_VERSION}
         ports:
-            - 8080:80
+            - ${NGINX_PORT}:80
         networks:
             - appNet
             - dbNet
@@ -17,7 +17,7 @@ services:
           - php
 
     php:
-        image: php:7-fpm-alpine
+        image: php:${PHP_VERSION}
         expose:
             - 9000
         networks:
@@ -27,22 +27,22 @@ services:
         working_dir: /var/www
 
     composer:
-        image: composer/composer
-        command: install -v
+        image: composer/composer:${COMPOSER_VERSION}
+        command: ${COMPOSER_COMMAND}
         networks:
             - appNet
         volumes:
             - ./www:/app
 
     mysql:
-        image: mysql:5.7
+        image: mysql:${MYSQL_VERSION}
         ports:
-            - 3307:3306
+            - ${MYSQL_PORT}:3306
         environment:
-            MYSQL_ROOT_PASSWORD: root
-            MYSQL_DATABASE: iceBT
-            MYSQL_USER: user
-            MYSQL_PASSWORD: pass
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+            MYSQL_DATABASE: ${MYSQL_DATABASE_NAME}
+            MYSQL_USER: ${MYSQL_DATABASE_USER}
+            MYSQL_PASSWORD: ${MYSQL_DATABASE_PASSWORD}
         networks:
             - dbNet
             - trackerNet
@@ -50,9 +50,9 @@ services:
             - mysqlData:/var/lib/mysql
 
     phpmyadmin:
-        image: phpmyadmin/phpmyadmin:latest
+        image: phpmyadmin/phpmyadmin:${PMA_VERSION}
         ports:
-            - 8085:80
+            - ${PMA_PORT}:80
         environment:
             PMA_HOST: mysql
         networks:
@@ -61,18 +61,18 @@ services:
             - mysql
 
     redis:
-        image: redis:4-alpine
+        image: redis:${REDIS_VERSION}
         ports:
-          - '6380:6379'
+          - ${REDIS_PORT}:6379
         networks:
           - trackerNet
         volumes:
           - redisData:/data
 
     phpredmin:
-        image: sasanrose/phpredmin
+        image: sasanrose/phpredmin:${PRM_VERSION}
         environment:
-            - PHPREDMIN_DATABASE_REDIS_0_HOST=redis
+            - PHPREDMIN_DATABASE_REDIS_0_HOST=redis #todo: set in config
         ports:
             - "8082:80"
         networks:
