@@ -1,0 +1,47 @@
+FROM golang:1
+
+MAINTAINER Goon3r
+
+# Set the GOBIN environment variable
+ENV GOBIN=/go/bin
+
+# Attach build arguments
+ARG DEBIAN_FRONTEND=noninteractive
+
+# Prepare environmnt
+RUN apt-get update \
+    && apt-get install -y apt-utils git dh-autoreconf
+
+# Install glide
+RUN curl https://glide.sh/get | sh
+
+# Install python
+RUN apt-get remove -y python python-minimal \
+    && apt-get install -y python3 python3-pip
+
+# Install geoip
+RUN git clone https://github.com/maxmind/geoip-api-c.git geoip \
+    && cd geoip \
+    && ./bootstrap \
+    && ./configure \
+    && make \
+    && make check \
+    && make install \
+    && cd .. \
+    && rm -rf geoip \
+    && echo "/usr/local/lib/" >> /etc/ld.so.conf \
+    && ldconfig
+
+# Prepare iceMika start script
+# - Installs/Maintains any tracker dependencies
+# - Installs/Maintains any python requirements
+# - Installs the current mika package
+# - Runs the newly install mika
+RUN echo "cd /go/src/github.com/Goon3r/iceMika && glide install" > /mikastart.sh \
+    && echo "pip3 install -r /go/src/github.com/Goon3r/iceMika/tools/requirements.txt" >> /mikastart.sh \
+    && echo "python3 /go/src/github.com/Goon3r/iceMika/tools/manage.py warmup" >> /mikastart.sh \
+    && echo "go-wrapper install /go/src/github.com/Goon3r/iceMika/cmd/mika/mika.go" >> /mikastart.sh \
+    && echo "mika" >>  /mikastart.sh
+
+# Run iceMika
+CMD ["/bin/bash", "/mikastart.sh"]

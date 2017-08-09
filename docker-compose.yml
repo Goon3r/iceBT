@@ -1,0 +1,111 @@
+#todo: env file, look at populating config from env, building env from shared config
+
+version: '3'
+
+services:
+    nginx:
+        image: nginx:1-alpine
+        ports:
+            - 8080:80
+        networks:
+            - appNet
+            - dbNet
+        volumes:
+            - ./env/config/nginx.conf:/etc/nginx/conf.d/default.conf
+            - ./www:/var/www
+        depends_on:
+          - php
+
+    php:
+        image: php:7-fpm-alpine
+        expose:
+            - 9000
+        networks:
+            - appNet
+        volumes:
+            - ./www:/var/www
+        working_dir: /var/www
+
+    composer:
+        image: composer/composer
+        command: install -v
+        networks:
+            - appNet
+        volumes:
+            - ./www:/app
+
+    mysql:
+        image: mysql:5.7
+        ports:
+            - 3307:3306
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: iceBT
+            MYSQL_USER: user
+            MYSQL_PASSWORD: pass
+        networks:
+            - dbNet
+            - trackerNet
+        volumes:
+            - mysqlData:/var/lib/mysql
+
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin:latest
+        ports:
+            - 8085:80
+        environment:
+            PMA_HOST: mysql
+        networks:
+            - dbNet
+        depends_on:
+            - mysql
+
+    redis:
+        image: redis:4-alpine
+        ports:
+          - '6380:6379'
+        networks:
+          - trackerNet
+        volumes:
+          - redisData:/data
+
+    phpredmin:
+        image: sasanrose/phpredmin
+        environment:
+            - PHPREDMIN_DATABASE_REDIS_0_HOST=redis
+        ports:
+            - "8082:80"
+        networks:
+            - trackerNet
+        volumes:
+            - ./env/config/phpredmin.php:/var/www/html/phpredmin/config.php
+        depends_on:
+            - redis
+
+    #todo: generate key on build, avoid user input
+    icemika:
+        build:
+            context: ./env
+            dockerfile: ./containers/iceMika/DockerFile
+        networks:
+            - trackerNet
+        volumes:
+            - ./env/src/github.com/Goon3r/iceMika:/go/src/github.com/Goon3r/iceMika
+            - ./env/config/icemika.json:/go/src/github.com/Goon3r/iceMika/config.json
+        depends_on:
+            - mysql
+            - redis
+
+networks:
+    appNet:
+        driver: bridge
+    dbNet:
+        driver: bridge
+    trackerNet:
+        driver: bridge
+
+volumes:
+    mysqlData:
+        driver: local
+    redisData:
+        driver: local
