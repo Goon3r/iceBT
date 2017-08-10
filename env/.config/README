@@ -4,7 +4,7 @@ Configuration values should not be set directly in the files within this
 directory. They are tokenized boilerplate configuration files which are
 populated with the values set in config.yml when iceBT commands have been run
 that trigger a build/start of the iceBT stack. To change the values used in
-these configuration files update the configuration value in config.yml
+these configuration files update the configuration values in config.yml
 
 EXCEPTION: There is one exception to this rule, (which at the time of writing
 is) nginx.conf.dist. This file may be duplicated (save as nginx.conf) and
