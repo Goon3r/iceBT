@@ -1,5 +1,3 @@
-#todo: env file, look at populating config from env, building env from shared config
-
 version: '3'
 
 services:
