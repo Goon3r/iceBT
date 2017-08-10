@@ -4,6 +4,13 @@
 # - Place project specific ignore statements in this section.
 # ==============================================================================
 
+# Configuration files
+config.yml
+.env
+env/.config/nginx.conf
+env/.config/icemika.json
+env/.config/phpredmin.php
+
 # ==============================================================================
 # Dreamweaver Ignores
 #
