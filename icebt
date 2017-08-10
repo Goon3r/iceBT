@@ -18,9 +18,7 @@ else
         exit 0
     fi
 
-    # If a stop command, run the docker-compose up commnad
-    # $? == the status code return by ./cli/configInit.sh
-    # $? = 0 indicates success
+    # If a stop command, run the docker-compose up command
     if [ $1 == 'stop' ]; then
         shift 1
         docker-compose down $@
@@ -28,6 +26,8 @@ else
     fi
 
     # If a build command, run the standard docker-compose build command
+    # $? == the status code return by ./cli/configInit.sh
+    # $? = 0 indicates success
     if [ $1 == 'build' ]; then
         shift 1
         .cli/configInit.sh
