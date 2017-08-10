@@ -11,7 +11,7 @@ services:
             - appNet
             - dbNet
         volumes:
-            - ./env/config/nginx.conf:/etc/nginx/conf.d/default.conf
+            - ./env/.config/nginx.conf:/etc/nginx/conf.d/default.conf
             - ./www:/var/www
         depends_on:
           - php
@@ -50,9 +50,9 @@ services:
             - mysqlData:/var/lib/mysql
 
     phpmyadmin:
-        image: phpmyadmin/phpmyadmin:${PMA_VERSION}
+        image: phpmyadmin/phpmyadmin:${PHPMYADMIN_VERSION}
         ports:
-            - ${PMA_PORT}:80
+            - ${PHPMYADMIN_PORT}:80
         environment:
             PMA_HOST: mysql
         networks:
@@ -70,15 +70,13 @@ services:
           - redisData:/data
 
     phpredmin:
-        image: sasanrose/phpredmin:${PRM_VERSION}
-        environment:
-            - PHPREDMIN_DATABASE_REDIS_0_HOST=redis #todo: set in config
+        image: sasanrose/phpredmin:${PHPREDMIN_VERSION}
         ports:
-            - "8082:80"
+            - ${PHPREDMIN_PORT}:80
         networks:
             - trackerNet
         volumes:
-            - ./env/config/phpredmin.php:/var/www/html/phpredmin/config.php
+            - ./env/.config/phpredmin.php:/var/www/html/phpredmin/config.php
         depends_on:
             - redis
 
@@ -91,7 +89,7 @@ services:
             - trackerNet
         volumes:
             - ./env/src/github.com/Goon3r/iceMika:/go/src/github.com/Goon3r/iceMika
-            - ./env/config/icemika.json:/go/src/github.com/Goon3r/iceMika/config.json
+            - ./env/.config/icemika.json:/go/src/github.com/Goon3r/iceMika/config.json
         depends_on:
             - mysql
             - redis
