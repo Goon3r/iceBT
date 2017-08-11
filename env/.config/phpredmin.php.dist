@@ -5,10 +5,10 @@ $config = array(
     'default_action'     => 'Index',
     'production'         => true,
     'default_layout'     => 'layout',
-    'timezone'           => 'Europe/Amsterdam',
+    'timezone'           => '{@phpredmin.timezone}',
     'auth' => array(
-        'username' => 'admin',
-        'password' => password_hash('admin', PASSWORD_DEFAULT)
+        'username' => '{@admin.username}',
+        'password' => password_hash('{@admin.password}', PASSWORD_DEFAULT)
     ),
     'log' => array(
         'driver'    => 'file',
@@ -19,23 +19,19 @@ $config = array(
     ),
     'database'  => array(
         'driver' => 'redis',
-        'mysql'  => array(
-            'host'     => 'localhost',
-            'username' => 'root',
-            'password' => 'root'
-        ),
         'redis' => array(
             array(
-                'host'     => 'localhost',
+                'host'     => 'redis',
                 'port'     => '6379',
-                'password' => null,
+                'password' => '{@admin.password}',
                 'database' => 0,
                 'max_databases' => 16, /* Manual configuration of max databases for Redis < 2.6 */
                 'stats'    => array(
                     'enable'   => 1,
                     'database' => 0,
                 ),
-                'dbNames' => array( /* Name databases. key should be database id and value is the name */
+                'dbNames' => array(
+                    /* Name databases. key should be database id and value is the name */
                 ),
             ),
         ),

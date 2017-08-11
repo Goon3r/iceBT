@@ -1,0 +1,210 @@
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# iceBT Configuration File
+#
+# This configuration is used as part of the ./icebt commands in order to build
+# the stack. The majority of these settings (ports, version numbers) will not
+# need to be changed.
+#
+# IMPORTANT: This file must be indented using 4 spaces. Failing to do so will
+# result in bash parsing errors and failed builds. Nobody wants that.
+#
+# IMPORTANT: Initialise this file.
+# Recommended method: ./icebt config-init
+# Alternative method: duplicate this file, save as config.yml
+#
+# IMPORTANT: It is strongly recommended to rebuild any built serivce after
+# changing any of these configuration values.
+# Services can be rebuilt using: ./icebt rebuild [SERVICE_NAME]
+# If no [SERVICE_NAME] is provided all services will be rebuilt
+#
+# todo: look into passing indent length to arguments
+# todo: add iceMika configuration values
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+# Administration Configuration
+#
+# The username password combination provided here can be used to access the
+# following services:
+# - mysql (superuser for the mysql database defined)
+# - phpmyadmin (manage the defined mysql database only)
+# - phpredmin
+# - postgres (superuser for the postgres database defined)
+# - pgweb
+# - redis (database password)
+#
+# The username password combination provided here will be the mysql account
+# details used in the iceMika connection to the mysql database. Read the MySql
+# configuration comments for implications of changing these details post build.
+#
+# The username password combination provided here will be the postgres account
+# details used. Read the postgres configuration comments for implications of
+# changing these details post build.
+#
+# The password provided here will be used as the redis database password. Read
+# the redis configuration comments for implications of changing these details
+# post build.
+#
+# username:
+#     The username to use for the administration account
+# password:
+#     The password to use for the administration account.
+admin:
+    username: admin
+    password: admin
+
+# Composer Configuration
+#
+# version:
+#     The version of composer to use.
+#     A Docker image tag should be provided.
+#     Tags: https://store.docker.com/images/composer
+# command:
+#     The composer command to run on initialisation
+#     This command will be responsible for building the iceWeb package.
+#     Commands listed here: https://getcomposer.org/doc/03-cli.md
+#     Recommended production value: install
+composer:
+    version: latest
+    command: install -v
+
+# MySQL Configuration
+#
+# IMPORTANT: Due to limitations in the mysql data volume, root passwords, admin
+# account details and databases will only be created on the initial volume
+# build. That is the first time the iceBT stack is built. Changes to these
+# account details made after the first build will have to be executed manually.
+# This is the same for the database user created with the admin username and
+# password. Even if the details are changed manually the changes must be
+# reflected within this file. If they are not, service links requiring database
+# credentials (for example iceMika needing a database username and password
+# [admin username, password]) may not be able to connect properly and will fail.
+#
+# version:
+#     The MySql version to use.
+#     A Docker image tag should be provided.
+#     Tags: https://store.docker.com/images/mysql
+# port:
+#     The port this service will be exposed to on the host machine.
+#     This does not affect the internal port 3306 which is used regardless.
+# database:
+#     The name of the main database to create for the tracker.
+# root_password:
+#     The name of the password used for the root account of the mysql instance.
+mysql:
+    version: 5.7
+    port: 3307
+    database: iceBT
+    root_password: root
+
+# nginx Configuration
+#
+# version:
+#     The version of nginx to use.
+#     A Docker image tag should be provided.
+#     Docker image tags listed here: https://store.docker.com/images/nginx
+# port:
+#     The port this service will be exposed to on the host machine.
+#     This does not affect the internal port 80 which is used regardless.
+nginx:
+    version: 1-alpine
+    port: 8080
+
+# PGWEB Configuration
+# - Web-based PostgreSQL database browser.
+#
+# port:
+#     The port this service will be exposed to on the host machine.
+#     This does not affect the internal port 8081 which is used regardless.
+pgweb:
+    port: 8083
+
+# PHP Configuration
+#
+# version:
+#     The version of PHP to use.
+#     A Docker image tag should be provided.
+#     Tags: https://store.docker.com/images/php
+php:
+    version: 7-fpm-alpine
+
+# PHPMyAdmin Configuration
+#
+# version:
+#     The version of PHPMyAdmin to use.
+#     A Docker image tag should be provided.
+#     Tags: https://store.docker.com/community/images/phpmyadmin/phpmyadmin
+# port:
+#     The port this service will be exposed to on the host machine.
+# timezone:
+phpmyadmin:
+    version: latest
+    port: 8081
+
+# PHPRedMin Configuration
+#
+# version:
+#     The version of PHPRedMin to use.
+#     A Docker image tag should be provided.
+#     Tags: https://store.docker.com/community/images/sasanrose/phpredmin
+# port:
+#     The port this service will be exposed to on the host machine.
+# timezone:
+#     The server timezone to use for the PHPRedMin service.
+#     Must be a valid PHP timezone string.
+#     Valid timezones: http://php.net/manual/en/timezones.php
+phpredmin:
+    version: latest
+    port: 8082
+    timezone: Europe/London
+
+# PostgreSQL Configuration
+#
+# IMPORTANT: Due to limitations in the postgresql data volume, the database,
+# username (set in admin) and password (set in admin) will only be created on
+# the initial volume build. That is the first time the iceBT stack is built.
+# Changes to these details made after the first build will have to be executed
+# manually. This is the same for the database user created with the admin
+# username and password. Even if the details are changed manually the changes
+# must be reflected within this file. If they are not, service links requiring
+# database credentials (for example the pgweb service that connects via a
+# postgres database url built using values set here) may not be able to connect
+# properly and will fail.
+#
+# version:
+#     The version of PostgreSQL to use.
+#     A Docker image tag should be provided.
+#     Tags: https://store.docker.com/images/postgres
+# port:
+#     The port this services will be to on the host machine.
+#     This does not affect the internal port 5432 which is used regardless.
+# database:
+#     The name of the database to create.
+#     This database will be accessible using the username and password set in
+#     the admin section of this configuration file.
+postgres:
+    version: 9.6-alpine
+    port: 5432
+    database: iceBT
+
+# Redis Configuration
+#
+# IMPORTANT: Due to limitations in the redis data volume, the redis password
+# (set in admin) will only be set on the initial volume build. That is the first
+# time the iceBT stack is built. Changes to the admin password made after the
+# initial redis build will have to be executed manually. They will not be
+# automatically updated on a restart, rebuild of this service. If an admin
+# password is required to be changed ensure this configuration file is updated
+# to reflect that change. If it is not, service links requiring the redis
+# password (phpredmin for example) may not be able to connect properly and will
+# fail.
+#
+# version:
+#     The version of Redis to use.
+#     A Docker image tag should be provided.
+#     Tags: https://store.docker.com/images/redis
+# port:
+#     The port this server will be exposed to on the host machine.
+#     This does not affect the internal port 6379 which is used regardless.
+redis:
+    version: 4-alpine
+    port: 6380

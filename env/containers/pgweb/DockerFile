@@ -1,0 +1,12 @@
+FROM sosedoff/pgweb:latest
+
+MAINTAINER Goon3r
+
+# Define the auth user and password env variables
+# Set dummy values knowing these will be replace with .env variables by
+# docker-compose.yml in the execution of ./icebt start command
+ENV PGWEB_AUTH_USER d41d8cd9
+ENV PGWEB_AUTH_PASS ecf8427e
+
+# Update the pgweb run command to enable HTTP auth
+CMD /usr/bin/pgweb --bind=0.0.0.0 --listen=8081 --auth-user=$PGWEB_AUTH_USER --auth-pass=$PGWEB_AUTH_PASS

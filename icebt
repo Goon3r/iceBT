@@ -6,25 +6,47 @@ if [ $# == 0 ]; then
     exit 0
 else
 
-    # If a start command, run the docker-compose up commnad
+    # If a start command, run the docker-compose up command
+    # $? == the status code return by ./cli/configInit.sh
+    # $? = 0 indicates success
     if [ $1 == 'start' ]; then
         shift 1
-        docker-compose up $@
+        .cli/configInit.sh
+        if [ $? -eq "0" ]; then
+            docker-compose up $@
+        fi
         exit 0
     fi
 
-    # If a stop command, run the docker-compose up commnad
+    # If a stop command, run the docker-compose up command
     if [ $1 == 'stop' ]; then
         shift 1
         docker-compose down $@
         exit 0
     fi
 
+    # If a build command, run the standard docker-compose build command
+    # $? == the status code return by ./cli/configInit.sh
+    # $? = 0 indicates success
+    if [ $1 == 'build' ]; then
+        shift 1
+        .cli/configInit.sh
+        if [ $? -eq "0" ]; then
+            docker-compose build $@
+        fi
+        exit 0
+    fi
+
     # If a rebuild command, run the docker-compose build command with no cache
     # option set against it.
+    # $? == the status code return by ./cli/configInit.sh
+    # $? = 0 indicates success
     if [ $1 == 'rebuild' ]; then
         shift 1
-        docker-compose build --no-cache $@
+        .cli/configInit.sh
+        if [ $? -eq "0" ]; then
+            docker-compose build --no-cache $@
+        fi
         exit 0
     fi
 
@@ -35,6 +57,18 @@ else
         exit 0
     fi
 
+    # If a config init command is ran, copy config.yml.dist to config.yml
+    if [ $1 == 'config-init' ]; then
+        if [ ! -f config.yml ]; then
+            cp config.yml.dist config.yml
+            echo "config.yml created, go configure!"
+        else
+            echo "config.yml already exists!"
+        fi
+        exit 0
+    fi
+
+    # Pass any unhandled commands direct to docker-compose
     docker-compose $@
     exit 0
 fi
