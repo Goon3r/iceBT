@@ -20,7 +20,8 @@ eval $(yamlParse config.yml "c_")
 requiredValues=(admin_username admin_password composer_version composer_command
  mysql_version mysql_port mysql_database nginx_version nginx_port php_version
  phpmyadmin_version phpmyadmin_port phpredmin_version phpredmin_port
- redis_version redis_port)
+ redis_version redis_port postgres_version postgres_database postgres_port
+ pgweb_port)
 for i in "${requiredValues[@]}"
 do
     key=c_$i
@@ -30,6 +31,8 @@ do
         exit 1
     fi
 done
+
+#todo: validate no matching ports
 
 # Nginx config creation
 # - Copy dist config into usable without overwriting if one already exists.
@@ -54,6 +57,10 @@ sed -e "s/{@nginx\.version}/$c_nginx_version/g" \
     -e "s/{@redis\.port}/$c_redis_port/g" \
     -e "s/{@phpredmin\.version}/$c_phpredmin_version/g" \
     -e "s/{@phpredmin\.port}/$c_phpredmin_port/g" \
+    -e "s/{@postgres\.version}/$c_postgres_version/g" \
+    -e "s/{@postgres\.database}/$c_postgres_database/g" \
+    -e "s/{@postgres\.port}/$c_postgres_port/g" \
+    -e "s/{@pgweb\.port}/$c_pgweb_port/g" \
      ./.env.dist > ./.env
 
 #icemika.json token replacement

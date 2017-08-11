@@ -58,6 +58,7 @@ services:
         depends_on:
             - mysql
 
+    #todo: password protect database, set in config.yml
     redis:
         image: redis:${REDIS_VERSION}
         ports:
@@ -92,16 +93,49 @@ services:
             - mysql
             - redis
 
+    postgres:
+        image: postgres:${POSTGRES_VERSION}
+        ports:
+            - ${POSTGRES_PORT}:5432
+        environment:
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+            POSTGRES_DB: ${POSTGRES_DATABASE}
+        networks:
+            - postgresNet
+        volumes:
+            - postgresData:/var/lib/postgresql/data
+
+    #todo: look into enabline postgres ssl so ?sslmode can be removed - https://gist.github.com/likwid/86193ef581c530ea55d3
+    pgweb:
+        build:
+            context: ./env
+            dockerfile: ./containers/pgweb/DockerFile
+        ports:
+            - ${PGWEB_PORT}:8081
+        environment:
+            DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DATABASE}?sslmode=disable
+            PGWEB_AUTH_USER: ${POSTGRES_USER}
+            PGWEB_AUTH_PASS: ${POSTGRES_PASSWORD}
+        networks:
+            - postgresNet
+        depends_on:
+          - postgres
+
 networks:
     appNet:
         driver: bridge
     dbNet:
+        driver: bridge
+    postgresNet:
         driver: bridge
     trackerNet:
         driver: bridge
 
 volumes:
     mysqlData:
+        driver: local
+    postgresData:
         driver: local
     redisData:
         driver: local
