@@ -2,7 +2,8 @@
 
 # Validate required files exist
 requiredFiles=(./config.yml ./.env.dist ./env/.config/icemika.json.dist
-    ./env/.config/nginx.conf.dist ./env/.config/phpredmin.php.dist)
+    ./env/.config/nginx.conf.dist ./env/.config/phpredmin.php.dist
+    ./env/.config/redis.conf.dist)
 for file in "${requiredFiles[@]}"
 do
     if [ ! -f $file ]; then
@@ -78,5 +79,11 @@ sed -e "s|{@phpredmin\.timezone}|$c_phpredmin_timezone|g" \
     -e "s/{@admin\.username}/$c_admin_username/g" \
     -e "s/{@admin\.password}/$c_admin_password/g" \
     ./env/.config/phpredmin.php.dist > ./env/.config/phpredmin.php
+
+# redis.conf token replacement
+# - Replace configuration (config.yml) values into ./env/config/redis.conf.dist
+#   save to ./env/config/redis.conf
+sed -e "s/{@admin\.password}/$c_admin_password/g" \
+    ./env/.config/redis.conf.dist > ./env/.config/redis.conf
 
 exit 0

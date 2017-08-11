@@ -2,7 +2,7 @@
     "Debug": false,
     "ListenHost": ":34000",
     "RedisHost": "redis:6379",
-    "RedisPass": "",
+    "RedisPass": "{@admin.password}",
     "RedisMaxIdle": 500,
     "RedisDB": 0,
     "IPV6Enabled": false,

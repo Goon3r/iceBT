@@ -10,6 +10,7 @@ config.yml
 env/.config/nginx.conf
 env/.config/icemika.json
 env/.config/phpredmin.php
+env/.config/redis.conf
 
 # ==============================================================================
 # Dreamweaver Ignores

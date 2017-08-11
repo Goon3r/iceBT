@@ -25,11 +25,12 @@
 #
 # The username password combination provided here can be used to access the
 # following services:
-# - mysql as a superuser for the mysql database defined
-# - phpmyadmin
+# - mysql (superuser for the mysql database defined)
+# - phpmyadmin (manage the defined mysql database only)
 # - phpredmin
-# - postgres as a superuser for the postgres database defined
+# - postgres (superuser for the postgres database defined)
 # - pgweb
+# - redis (database password)
 #
 # The username password combination provided here will be the mysql account
 # details used in the iceMika connection to the mysql database. Read the MySql
@@ -39,8 +40,9 @@
 # details used. Read the postgres configuration comments for implications of
 # changing these details post build.
 #
-# The mysql root account (username: root, password: defined in config) can be
-# used to access the mysql and phpmyadmin services also.
+# The password provided here will be used as the redis database password. Read
+# the redis configuration comments for implications of changing these details
+# post build.
 #
 # username:
 #     The username to use for the administration account
@@ -185,6 +187,16 @@ postgres:
     database: iceBT
 
 # Redis Configuration
+#
+# IMPORTANT: Due to limitations in the redis data volume, the redis password
+# (set in admin) will only be set on the initial volume build. That is the first
+# time the iceBT stack is built. Changes to the admin password made after the
+# initial redis build will have to be executed manually. They will not be
+# automatically updated on a restart, rebuild of this service. If an admin
+# password is required to be changed ensure this configuration file is updated
+# to reflect that change. If it is not, service links requiring the redis
+# password (phpredmin for example) may not be able to connect properly and will
+# fail.
 #
 # version:
 #     The version of Redis to use.

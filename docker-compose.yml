@@ -62,11 +62,13 @@ services:
     redis:
         image: redis:${REDIS_VERSION}
         ports:
-          - ${REDIS_PORT}:6379
+            - ${REDIS_PORT}:6379
         networks:
-          - trackerNet
+            - trackerNet
         volumes:
-          - redisData:/data
+            - redisData:/data
+            - ./env/.config/redis.conf:/usr/local/etc/redis/redis.conf
+        command: redis-server /usr/local/etc/redis/redis.conf
 
     phpredmin:
         image: sasanrose/phpredmin:${PHPREDMIN_VERSION}
