@@ -109,8 +109,8 @@ services:
     #todo: look into enabline postgres ssl so ?sslmode can be removed - https://gist.github.com/likwid/86193ef581c530ea55d3
     pgweb:
         build:
-            context: ./env
-            dockerfile: ./containers/pgweb/DockerFile
+            context: ./env/containers/pgweb
+            dockerfile: ./DockerFile
         ports:
             - ${PGWEB_PORT}:8081
         environment:
