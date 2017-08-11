@@ -87,7 +87,7 @@ services:
         networks:
             - trackerNet
         volumes:
-            - ./env/src/github.com/Goon3r/iceMika:/go/src/github.com/Goon3r/iceMika
+            - ./env/src/github.com/Goon3r/icemika:/go/src/github.com/Goon3r/iceMika
             - ./env/.config/icemika.json:/go/src/github.com/Goon3r/iceMika/config.json
         depends_on:
             - mysql
