@@ -8,7 +8,14 @@
 # IMPORTANT: This file must be indented using 4 spaces. Failing to do so will
 # result in bash parsing errors and failed builds. Nobody wants that.
 #
-# IMPORTANT: Duplicate this file and save as (config.yml)
+# IMPORTANT: Initialise this file.
+# Recommended method: ./icebt config-init
+# Alternative method: duplicate this file, save as config.yml
+#
+# IMPORTANT: It is strongly recommended to rebuild any built serivce after
+# changing any of these configuration values.
+# Services can be rebuilt using: ./icebt rebuild [SERVICE_NAME]
+# If no [SERVICE_NAME] is provided all services will be rebuilt
 #
 # todo: look into passing indent length to arguments
 # todo: add iceMika configuration values
@@ -21,10 +28,16 @@
 # - mysql as a superuser for the mysql database defined
 # - phpmyadmin
 # - phpredmin
+# - postgres as a superuser for the postgres database defined
+# - pgweb
 #
 # The username password combination provided here will be the mysql account
 # details used in the iceMika connection to the mysql database. Read the MySql
 # configuration comments for implications of changing these details post build.
+#
+# The username password combination provided here will be the postgres account
+# details used. Read the postgres configuration comments for implications of
+# changing these details post build.
 #
 # The mysql root account (username: root, password: defined in config) can be
 # used to access the mysql and phpmyadmin services also.
@@ -54,15 +67,15 @@ composer:
 
 # MySQL Configuration
 #
-# IMPORTANT: Due to a limitation in the mysql data, root passwords and admin
-# account details will only be created on the initial volume build. That is the
-# first time the iceBT stack is built. Changes to these account details made
-# after the first build will have to be executed manually. This is the same for
-# the database user created with the admin username and password. Even if the
-# details are changed manually the changes must be reflected within this file.
-# If they are not, service links requiring database credentials (for example
-# iceMika needing a database username and password [admin username, password])
-# may not be able to connect properly and will fail.
+# IMPORTANT: Due to limitations in the mysql data volume, root passwords, admin
+# account details and databases will only be created on the initial volume
+# build. That is the first time the iceBT stack is built. Changes to these
+# account details made after the first build will have to be executed manually.
+# This is the same for the database user created with the admin username and
+# password. Even if the details are changed manually the changes must be
+# reflected within this file. If they are not, service links requiring database
+# credentials (for example iceMika needing a database username and password
+# [admin username, password]) may not be able to connect properly and will fail.
 #
 # version:
 #     The MySql version to use.
@@ -93,6 +106,15 @@ mysql:
 nginx:
     version: 1-alpine
     port: 8080
+
+# PGWEB Configuration
+# - Web-based PostgreSQL database browser.
+#
+# port:
+#     The port this service will be exposed to on the host machine.
+#     This does not affect the internal port 8081 which is used regardless.
+pgweb:
+    port: 8083
 
 # PHP Configuration
 #
@@ -132,6 +154,35 @@ phpredmin:
     version: latest
     port: 8082
     timezone: Europe/London
+
+# PostgreSQL Configuration
+#
+# IMPORTANT: Due to limitations in the postgresql data volume, the database,
+# username (set in admin) and password (set in admin) will only be created on
+# the initial volume build. That is the first time the iceBT stack is built.
+# Changes to these details made after the first build will have to be executed
+# manually. This is the same for the database user created with the admin
+# username and password. Even if the details are changed manually the changes
+# must be reflected within this file. If they are not, service links requiring
+# database credentials (for example the pgweb service that connects via a
+# postgres database url built using values set here) may not be able to connect
+# properly and will fail.
+#
+# version:
+#     The version of PostgreSQL to use.
+#     A Docker image tag should be provided.
+#     Tags: https://store.docker.com/images/postgres
+# port:
+#     The port this services will be to on the host machine.
+#     This does not affect the internal port 5432 which is used regardless.
+# database:
+#     The name of the database to create.
+#     This database will be accessible using the username and password set in
+#     the admin section of this configuration file.
+postgres:
+    version: 9.6-alpine
+    port: 5432
+    database: iceBT
 
 # Redis Configuration
 #
