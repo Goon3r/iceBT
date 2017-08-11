@@ -82,8 +82,8 @@ services:
     #todo: generate key on build, avoid user input
     icemika:
         build:
-            context: ./env
-            dockerfile: ./containers/iceMika/DockerFile
+            context: ./env/containers/icemika
+            dockerfile: ./DockerFile
         networks:
             - trackerNet
         volumes:
