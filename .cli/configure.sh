@@ -26,7 +26,9 @@ requiredValues=(admin_username admin_password composer_version composer_command
     phpmyadmin_version phpmyadmin_port phpredmin_version phpredmin_port
     redis_version redis_port postgres_version postgres_database postgres_port
     pgweb_port pgweb_version memcached_version memcached_port
-    phpmemcachedadmin_port)
+    memcached_memory_limit memcached_connection_limit memcached_threads
+    memcached_max_requests_per_event memcached_listen_backlog
+    memcached_max_item_size phpmemcachedadmin_port)
 for i in "${requiredValues[@]}"
 do
     if [ -z "${!i}" ]; then

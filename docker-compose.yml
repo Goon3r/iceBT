@@ -129,6 +129,15 @@ services:
             - ${MEMCACHED_PORT}:11211
         networks:
             - memcachedNet
+        command: [
+            "memcached", "-vv",
+            "-m", "${MEMCACHED_MEMORY_LIMIT}",
+            "-c", "${MEMCACHED_CONNECTION_LIMIT}",
+            "-t", "${MEMCACHED_THREADS}",
+            "-R", "${MEMCACHED_MAX_REQUESTS_PER_EVENT}",
+            "-b", "${MEMCACHED_LISTEN_BACKLOG}",
+            "-I", "${MEMCACHED_MAX_ITEM_SIZE}"
+        ]
 
     phpmemcachedadmin:
         build:

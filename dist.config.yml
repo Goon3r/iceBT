@@ -76,9 +76,38 @@ composer:
 # port:
 #     The port this serivce will be exposed to on the hose machine.
 #     This does not affect the internal port 11211 which is used regardless.
+# memory_limit:
+#     The amount of memory allocated to memcached for object storage.
+#     Value provided should be an integer representation of the megabytes to
+#     allocate.
+# connection_limit
+#     The maximum number of simultaneous connections to the memcached service.
+# threads:
+#     Specify the number of threads to use when processing incoming requests.
+#     The threading improves the performance of storing and retrieving data in
+#     the cache, using a locking system to prevent different threads overwriting
+#     or updating the same values
+# max_requests_per_event:
+#     The maximum number of requests per event process.
+# listen_backlog:
+#     The backlog queue limit.
+#     The backlog queue configures how many network connections can be waiting
+#     to be processed by memcached. Increasing this limit may reduce errors
+#     received by the client that it is not able to connect to the memcached
+#     instance, but does not improve the performance of the server.
+# max_item_size:
+#     Specify the maximum size permitted for storing an object within the
+#     memcached instance. The size supports a unit postfix
+#     (k for kilobytes, m for megabytes).
 memcached:
     version: 1-alpine
     port: 11211
+    memory_limit: 64
+    connection_limit: 1024
+    threads: 4
+    max_requests_per_event: 20
+    listen_backlog: 1024
+    max_item_size: 1m
 
 # MySQL Configuration
 #

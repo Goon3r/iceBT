@@ -97,6 +97,12 @@ prepareConfigFile() {
         -e "s/{@pgweb\.version}/$pgweb_version/g" \
         -e "s/{@memcached\.version}/$memcached_version/g" \
         -e "s/{@memcached\.port}/$memcached_port/g" \
+        -e "s/{@memcached\.memory_limit}/$memcached_memory_limit/g" \
+        -e "s/{@memcached\.connection_limit}/$memcached_connection_limit/g" \
+        -e "s/{@memcached\.threads}/$memcached_threads/g" \
+        -e "s/{@memcached\.max_requests_per_event}/$memcached_max_requests_per_event/g" \
+        -e "s/{@memcached\.listen_backlog}/$memcached_listen_backlog/g" \
+        -e "s/{@memcached\.max_item_size}/$memcached_max_item_size/g" \
         -e "s/{@phpmemcachedadmin\.port}/$phpmemcachedadmin_port/g" \
         -e "s/#.*$//" \
         -e "s|\/\*.*\*\/||g" $source > $dest
