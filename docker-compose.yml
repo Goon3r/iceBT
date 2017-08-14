@@ -58,7 +58,6 @@ services:
         depends_on:
             - mysql
 
-    #todo: password protect database, set in config.yml
     redis:
         image: redis:${REDIS_VERSION}
         ports:
