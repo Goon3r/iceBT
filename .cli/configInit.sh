@@ -18,7 +18,7 @@ done
 # Read config
 # - import must be relative to the calling icebt script, not this file.
 . ./.cli/yamlParse.sh
-eval $(yamlParse config.yml "c_")
+eval $(yamlParse config.yml)
 
 # Validate config
 requiredValues=(admin_username admin_password composer_version composer_command
@@ -29,8 +29,7 @@ requiredValues=(admin_username admin_password composer_version composer_command
     phpmemcachedadmin_port)
 for i in "${requiredValues[@]}"
 do
-    key=c_$i
-    if [ -z "${!key}" ]; then
+    if [ -z "${!i}" ]; then
         label="${i/_/:}"
         echo "config.yml invalid. Missing required value $label"
         exit 1

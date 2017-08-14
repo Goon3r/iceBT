@@ -73,31 +73,31 @@ configPrepare() {
         exit 1
     fi
 
-    sed -e "s/{@nginx\.version}/$c_nginx_version/g" \
-        -e "s/{@nginx\.port}/$c_nginx_port/g" \
-        -e "s/{@php\.version}/$c_php_version/g" \
-        -e "s/{@composer\.version}/$c_composer_version/g" \
-        -e "s/{@composer\.command}/$c_composer_command/g" \
-        -e "s/{@mysql\.version}/$c_mysql_version/g" \
-        -e "s/{@mysql\.port}/$c_mysql_port/g" \
-        -e "s/{@mysql\.rootpassword}/$c_mysql_root_password/g" \
-        -e "s/{@mysql\.database}/$c_mysql_database/g" \
-        -e "s/{@admin\.username}/$c_admin_username/g" \
-        -e "s/{@admin\.password}/$c_admin_password/g" \
-        -e "s/{@phpmyadmin\.version}/$c_phpmyadmin_version/g" \
-        -e "s/{@phpmyadmin\.port}/$c_phpmyadmin_port/g" \
-        -e "s/{@redis\.version}/$c_redis_version/g" \
-        -e "s/{@redis\.port}/$c_redis_port/g" \
-        -e "s/{@phpredmin\.version}/$c_phpredmin_version/g" \
-        -e "s/{@phpredmin\.port}/$c_phpredmin_port/g" \
-        -e "s/{@postgres\.version}/$c_postgres_version/g" \
-        -e "s/{@postgres\.database}/$c_postgres_database/g" \
-        -e "s/{@postgres\.port}/$c_postgres_port/g" \
-        -e "s/{@pgweb\.port}/$c_pgweb_port/g" \
-        -e "s/{@pgweb\.version}/$c_pgweb_version/g" \
-        -e "s/{@memcached\.version}/$c_memcached_version/g" \
-        -e "s/{@memcached\.port}/$c_memcached_port/g" \
-        -e "s/{@phpmemcachedadmin\.port}/$c_phpmemcachedadmin_port/g" \
+    sed -e "s/{@nginx\.version}/$nginx_version/g" \
+        -e "s/{@nginx\.port}/$nginx_port/g" \
+        -e "s/{@php\.version}/$php_version/g" \
+        -e "s/{@composer\.version}/$composer_version/g" \
+        -e "s/{@composer\.command}/$composer_command/g" \
+        -e "s/{@mysql\.version}/$mysql_version/g" \
+        -e "s/{@mysql\.port}/$mysql_port/g" \
+        -e "s/{@mysql\.rootpassword}/$mysql_root_password/g" \
+        -e "s/{@mysql\.database}/$mysql_database/g" \
+        -e "s/{@admin\.username}/$admin_username/g" \
+        -e "s/{@admin\.password}/$admin_password/g" \
+        -e "s/{@phpmyadmin\.version}/$phpmyadmin_version/g" \
+        -e "s/{@phpmyadmin\.port}/$phpmyadmin_port/g" \
+        -e "s/{@redis\.version}/$redis_version/g" \
+        -e "s/{@redis\.port}/$redis_port/g" \
+        -e "s/{@phpredmin\.version}/$phpredmin_version/g" \
+        -e "s/{@phpredmin\.port}/$phpredmin_port/g" \
+        -e "s/{@postgres\.version}/$postgres_version/g" \
+        -e "s/{@postgres\.database}/$postgres_database/g" \
+        -e "s/{@postgres\.port}/$postgres_port/g" \
+        -e "s/{@pgweb\.port}/$pgweb_port/g" \
+        -e "s/{@pgweb\.version}/$pgweb_version/g" \
+        -e "s/{@memcached\.version}/$memcached_version/g" \
+        -e "s/{@memcached\.port}/$memcached_port/g" \
+        -e "s/{@phpmemcachedadmin\.port}/$phpmemcachedadmin_port/g" \
         -e "s/#.*$//" \
         -e "s|\/\*.*\*\/||g" $source > $dest
     sed -i '' -e "/^[[:space:]]*$/d" $dest
