@@ -40,25 +40,15 @@ done
 
 # Import config prepare/tokenizing command
 # - import must be relative to the calling icebt script, not this file.
-. ./.cli/configPrepare.sh
+. ./.cli/prepareConfigFile.sh
 
-# .env file config creation
-configPrepare ./dist.env ./.env
-
-# Nginx config creation
-# - If config file doesnt already exist, copy over remove blanks and comments
-configPrepare nginx.conf
-# PHPMemcachedAdmin config creation
-configPrepare phpmemcachedadmin.conf.php
-
-# iceMika config creation
-configPrepare icemika.json
-
-# PHPRedMin config creation
-configPrepare phpredmin.php
-
-# Redis config creation
-configPrepare redis.conf
+# Prepare configuration files
+prepareConfigFile ./dist.env ./.env
+prepareConfigFile nginx.conf
+prepareConfigFile phpmemcachedadmin.conf.php
+prepareConfigFile icemika.json
+prepareConfigFile phpredmin.php
+prepareConfigFile redis.conf
 
 # All done
 exit 0

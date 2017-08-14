@@ -11,7 +11,7 @@ else
     # $? = 0 indicates success
     if [ $1 == 'start' ]; then
         shift 1
-        .cli/configInit.sh
+        .cli/configure.sh
         if [ $? -eq "0" ]; then
             docker-compose up $@
         fi
@@ -30,7 +30,7 @@ else
     # $? = 0 indicates success
     if [ $1 == 'build' ]; then
         shift 1
-        .cli/configInit.sh
+        .cli/configure.sh
         if [ $? -eq "0" ]; then
             docker-compose build $@
         fi
@@ -43,7 +43,7 @@ else
     # $? = 0 indicates success
     if [ $1 == 'rebuild' ]; then
         shift 1
-        .cli/configInit.sh
+        .cli/configure.sh
         if [ $? -eq "0" ]; then
             docker-compose build --no-cache $@
         fi

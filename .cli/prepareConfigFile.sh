@@ -43,7 +43,7 @@
 #         nginx.conf as an argument, if dist.nginx.conf has been duplicated
 #         and updated and saved to nginx.conf it will be used, if not the dist.
 #         version will be.
-configPrepare() {
+prepareConfigFile() {
     if [ -z $2 ]; then
         filePath="./env/config/"
         fileName=$1
