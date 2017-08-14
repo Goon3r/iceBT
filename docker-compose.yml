@@ -139,6 +139,8 @@ services:
             - ${PHPMEMCACHED_ADMIN_PORT}:80
         networks:
             - memcachedNet
+        depends_on:
+          - memcached
         volumes:
             - ./env/.config/phpmemcachedadmin.conf.php:/var/www/html/Config/Memcache.php
 
