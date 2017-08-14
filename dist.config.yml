@@ -74,7 +74,7 @@ composer:
 #     A Docker image tag should be provided.
 #     Tags: https://store.docker.com/images/memcached
 # port:
-#     The port this serivce will be exposed to on the hose machine.
+#     The port this service will be exposed to on the host machine.
 #     This does not affect the internal port 11211 which is used regardless.
 # memory_limit:
 #     The amount of memory allocated to memcached for object storage.
@@ -177,7 +177,7 @@ php:
 # PHPMemcachedAmin Configuration
 #
 # port:
-#     The port this service will be exposed to on the host machine
+#     The port this service will be exposed to on the host machine.
 #     This does not affect the internal port 80 which is used regardless.
 phpmemcachedadmin:
     port: 8084
@@ -230,7 +230,7 @@ phpredmin:
 #     A Docker image tag should be provided.
 #     Tags: https://store.docker.com/images/postgres
 # port:
-#     The port this services will be to on the host machine.
+#     The port this service will be exposed to on the host machine.
 #     This does not affect the internal port 5432 which is used regardless.
 # database:
 #     The name of the database to create.
@@ -258,8 +258,32 @@ postgres:
 #     A Docker image tag should be provided.
 #     Tags: https://store.docker.com/images/redis
 # port:
-#     The port this server will be exposed to on the host machine.
+#     The port this service will be exposed to on the host machine.
 #     This does not affect the internal port 6379 which is used regardless.
 redis:
     version: 4-alpine
     port: 6380
+
+# Sentry Configuration
+#
+# version:
+#     The version of Sentry to use.
+#     A Docker image tag should be provided
+#     Tags: https://hub.docker.com/_/sentry/
+# port:
+#     The port this service will be exposed to on the host machine.
+#     This does not affect the interal ports which are used regardless
+# secret:
+#     A secret key used for cryptographic functions within Sentry.
+#     This key should be unique and consistent across all running instances.
+#     IMPORTANT:
+#     Do not change this value in a running environment.
+#     Do not manually create this value.
+#     This value should have been populated as part of the config initialisation
+#     command (./icebt config-init) if it has not been populated run the
+#     following command: ./icebt sentry create-secret. Alternatively if you
+#     have not already done so, run the ./icebt config-init command.
+sentry:
+    version: 8
+    port: 8085
+    secret: @sentry.secret

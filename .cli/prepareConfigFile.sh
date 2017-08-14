@@ -104,6 +104,9 @@ prepareConfigFile() {
         -e "s/{@memcached\.listen_backlog}/$memcached_listen_backlog/g" \
         -e "s/{@memcached\.max_item_size}/$memcached_max_item_size/g" \
         -e "s/{@phpmemcachedadmin\.port}/$phpmemcachedadmin_port/g" \
+        -e "s/{@sentry\.version}/$sentry_version/g" \
+        -e "s/{@sentry\.port}/$sentry_port/g" \
+        -e "s/{@sentry\.secret}/$sentry_secret/g" \
         -e "s/#.*$//" \
         -e "s|\/\*.*\*\/||g" $source > $dest
     sed -i '' -e "/^[[:space:]]*$/d" $dest

@@ -18,7 +18,7 @@ done
 # Read config
 # - import must be relative to the calling icebt script, not this file.
 . ./.cli/yamlParse.sh
-eval $(yamlParse config.yml)
+eval $(yamlParse ./config.yml)
 
 # Validate config
 requiredValues=(admin_username admin_password composer_version composer_command
@@ -28,14 +28,23 @@ requiredValues=(admin_username admin_password composer_version composer_command
     pgweb_port pgweb_version memcached_version memcached_port
     memcached_memory_limit memcached_connection_limit memcached_threads
     memcached_max_requests_per_event memcached_listen_backlog
-    memcached_max_item_size phpmemcachedadmin_port)
+    memcached_max_item_size phpmemcachedadmin_port sentry_version sentry_port
+    sentry_secret)
 for i in "${requiredValues[@]}"
 do
+    label="${i/_/:}"
+
     if [ -z "${!i}" ]; then
-        label="${i/_/:}"
-        echo "config.yml invalid. Missing required value $label"
+        echo "Error: config.yml invalid. Missing required value $label"
         exit 1
     fi
+
+    if [ $i == "sentry_secret" ] && [ "${!i}" == "@sentry.secret" ]; then
+        echo "Error: Invalid $label value."
+        echo "To generate a valid value for this run: ./icebt sentry create-secret"
+        exit 1
+    fi
+
 done
 
 #todo: validate no matching ports

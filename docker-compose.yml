@@ -64,6 +64,7 @@ services:
             - ${REDIS_PORT}:6379
         networks:
             - trackerNet
+            - sentryNet
         volumes:
             - redisData:/data
             - ./env/config/.prod/redis.conf:/usr/local/etc/redis/redis.conf
@@ -104,6 +105,7 @@ services:
             POSTGRES_DB: ${POSTGRES_DATABASE}
         networks:
             - postgresNet
+            - sentryNet
         volumes:
             - postgresData:/var/lib/postgresql/data
 
@@ -129,6 +131,7 @@ services:
             - ${MEMCACHED_PORT}:11211
         networks:
             - memcachedNet
+            - sentryNet
         command: [
             "memcached", "-vv",
             "-m", "${MEMCACHED_MEMORY_LIMIT}",
@@ -152,6 +155,31 @@ services:
         volumes:
             - ./env/config/.prod/phpmemcachedadmin.conf.php:/var/www/html/Config/Memcache.php
 
+    #todo: attach SMTP service
+    sentry:
+        image: sentry:${SENTRY_VERSION}
+        ports:
+            - ${SENTRY_PORT}:9000
+        environment:
+            SENTRY_SECRET_KEY: ${SENTRY_SECRET}
+            SENTRY_POSTGRES_HOST: postgres
+            SENTRY_POSTGRES_PORT: 5432
+            SENTRY_DB_NAME: ${POSTGRES_DATABASE}
+            SENTRY_DB_USER: ${ADMIN_USERNAME}
+            SENTRY_DB_PASSWORD: ${ADMIN_PASSWORD}
+            SENTRY_REDIS_HOST: redis
+            SENTRY_REDIS_PORT: 6379
+            SENTRY_REDIS_DB: 0
+            SENTRY_REDIS_PASSWORD: ${ADMIN_PASSWORD}
+            SENTRY_MEMCACHED_HOST: memcached
+            SENTRY_MEMCACHED_PORT: 11211
+        networks:
+            - sentryNet
+        depends_on:
+          - postgres
+          - redis
+          - memcached
+
 
 networks:
     appNet:
@@ -161,6 +189,8 @@ networks:
     memcachedNet:
         driver: bridge
     postgresNet:
+        driver: bridge
+    sentryNet:
         driver: bridge
     trackerNet:
         driver: bridge

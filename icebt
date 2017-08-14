@@ -60,11 +60,83 @@ else
     # If a config init command is ran, copy config.yml.dist to config.yml
     if [ $1 == 'config-init' ]; then
         if [ ! -f config.yml ]; then
-            cp config.yml.dist config.yml
-            echo "config.yml created, go configure!"
+            cp dist.config.yml config.yml
+            echo "config.yml created."
+            echo "Patching in Sentry Secret Key"
+            ./icebt sentry create-secret
+            echo "Success! Go configure!"
         else
             echo "config.yml already exists!"
         fi
+        exit 0
+    fi
+
+    # If a sentry command is ran
+    if [ $1 == 'sentry' ]; then
+
+        if [ $2 == 'create-secret' ]; then
+            if [ ! -f config.yml ]; then
+                echo "Error: No config.yml file found."
+                echo "To create one run: ./icebt config-init"
+                exit 1
+            fi
+
+            echo "Generating Sentry secret key...";
+            docker pull sentry  &> /dev/null
+            secretKeyRaw=$(docker run --rm sentry config generate-secret-key)
+            secretKey=${secretKeyRaw/|/}
+            echo "Finalising..."
+            docker rmi sentry  &> /dev/null
+            sed -i '' -e "s|@sentry\.secret|$secretKey|g" ./config.yml
+            echo "Secret key generated."
+            echo "> Key: $secretKey"
+            echo "Attempted to patch key into config.yml at @sentry.secret."
+            echo "Please check config.yml's sentry settings to ensure this has completed correctly."
+            echo "If key hasn't patched please enter it in at sentry:secret before continuing."
+
+            while true; do
+                read -p "Do you need to initialise Sentry? [y|N] " yn
+                yn=${yn:-n}
+                case $yn in
+                    [Yy"yes"]* ) ./icebt sentry init; break;;
+                    [Nn"no"]* ) exit;;
+                    * ) exit;;
+                esac
+            done
+
+            exit 0;
+        fi
+
+        if [ $2 == 'init' ]; then
+            echo "Initialising Sentry."
+
+            . ./.cli/yamlParse.sh
+            eval $(yamlParse ./config.yml)
+            if [ -z $sentry_secret ] || [ $sentry_secret == "@sentry.secret" ]; then
+                echo "Coult not initialise Sentry, no secret set under sentry:secret in ./config.yml;"
+                echo "To create a secret run: ./icebt sentry create-secret"
+                exit 1
+            fi
+
+            .cli/configure.sh
+            if [ $? -eq "0" ]; then
+                echo "Creating required services..."
+                docker-compose create --build redis postgres memcached sentry &> /dev/null
+                echo "Starting required services..."
+                docker-compose start redis postgres memcached &> /dev/null
+                docker-compose start sentry &> /dev/null
+                docker-compose exec sentry sentry upgrade
+                echo "Cleaning up..."
+                docker-compose stop redis postgres memcached sentry &> /dev/null
+                docker-compose rm -y redis postgres memcached &> /dev/null
+                docker-compose rm -v -y sentry &> /dev/null
+                echo "Success: Sentry initialisation completed."
+            fi
+
+            exit 0
+        fi
+
+        echo "No sentry option recieved, closing."
         exit 0
     fi
 
