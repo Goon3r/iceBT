@@ -1,0 +1,12 @@
+TOKENIZED CONFIGURATION FILES
+
+To update the configuration values in the files within this directory,
+duplicate the required file removing the 'dist.' prefix.
+
+Tokens are available for use in the configuration files defined within this
+directory. Tokens will be replaced with the values set in the /config.yml file.
+
+TODO: Outline tokens and represented values
+
+IMPORTANT: Do not edit the configuration files inside of the '.prod' directory
+these files will be overwritten on service builds/restarts.

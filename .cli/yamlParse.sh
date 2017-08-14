@@ -2,7 +2,7 @@
 
 # Parses a yaml file into bash variables.
 #
-# The following function will conver the contents of a yaml file into bash
+# The following function will convert the contents of a yaml file into bash
 # variables with each indentation represented as an underscore (_) in the
 # variable name.
 #

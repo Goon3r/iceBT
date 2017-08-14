@@ -9,7 +9,7 @@ services:
             - appNet
             - dbNet
         volumes:
-            - ./env/.config/nginx.conf:/etc/nginx/conf.d/default.conf
+            - ./env/config/.prod/nginx.conf:/etc/nginx/conf.d/default.conf
             - ./www:/var/www
         depends_on:
           - php
@@ -67,7 +67,7 @@ services:
             - trackerNet
         volumes:
             - redisData:/data
-            - ./env/.config/redis.conf:/usr/local/etc/redis/redis.conf
+            - ./env/config/.prod/redis.conf:/usr/local/etc/redis/redis.conf
         command: redis-server /usr/local/etc/redis/redis.conf
 
     phpredmin:
@@ -77,7 +77,7 @@ services:
         networks:
             - trackerNet
         volumes:
-            - ./env/.config/phpredmin.php:/var/www/html/phpredmin/config.php
+            - ./env/config/.prod/phpredmin.php:/var/www/html/phpredmin/config.php
         depends_on:
             - redis
 
@@ -90,7 +90,7 @@ services:
             - trackerNet
         volumes:
             - ./env/src/github.com/Goon3r/icemika:/go/src/github.com/Goon3r/iceMika
-            - ./env/.config/icemika.json:/go/src/github.com/Goon3r/iceMika/config.json
+            - ./env/config/.prod/icemika.json:/go/src/github.com/Goon3r/iceMika/config.json
         depends_on:
             - mysql
             - redis
@@ -142,7 +142,7 @@ services:
         depends_on:
           - memcached
         volumes:
-            - ./env/.config/phpmemcachedadmin.conf.php:/var/www/html/Config/Memcache.php
+            - ./env/config/.prod/phpmemcachedadmin.conf.php:/var/www/html/Config/Memcache.php
 
 
 networks:
