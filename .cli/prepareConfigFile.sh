@@ -55,8 +55,8 @@ prepareConfigFile() {
             mkdir -p $destPath
         fi
 
-        # Detemine the source file, is it the original dist file or a copied updated
-        # file.
+        # Detemine the source file, is it the original dist file or a copied
+        # updated file.
         if [ ! -f $filePath$fileName ]; then
             source=$filePath"dist."$fileName;
         else

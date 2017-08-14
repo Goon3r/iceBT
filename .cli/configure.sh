@@ -38,11 +38,9 @@ done
 
 #todo: validate no matching ports
 
-# Import config prepare/tokenizing command
+# Prepare configuration files
 # - import must be relative to the calling icebt script, not this file.
 . ./.cli/prepareConfigFile.sh
-
-# Prepare configuration files
 prepareConfigFile ./dist.env ./.env
 prepareConfigFile nginx.conf
 prepareConfigFile phpmemcachedadmin.conf.php
