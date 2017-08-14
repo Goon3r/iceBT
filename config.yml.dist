@@ -125,10 +125,15 @@ nginx:
 # PGWEB Configuration
 # - Web-based PostgreSQL database browser.
 #
+# version:
+#     The version of pgweb to use.
+#     A Docker image tag should be provided.
+#     Tags: https://store.docker.com/community/images/sosedoff/pgweb/tags
 # port:
 #     The port this service will be exposed to on the host machine.
 #     This does not affect the internal port 8081 which is used regardless.
 pgweb:
+    version: latest
     port: 8083
 
 # PHP Configuration

@@ -110,9 +110,7 @@ services:
 
     #todo: look into enabline postgres ssl so ?sslmode can be removed - https://gist.github.com/likwid/86193ef581c530ea55d3
     pgweb:
-        build:
-            context: ./env/containers/pgweb
-            dockerfile: ./DockerFile
+        image: sosedoff/pgweb:latest
         ports:
             - ${PGWEB_PORT}:8081
         environment:
@@ -123,6 +121,7 @@ services:
             - postgresNet
         depends_on:
           - postgres
+        command: /usr/bin/pgweb --bind=0.0.0.0 --listen=8081 --auth-user=${ADMIN_USERNAME} --auth-pass=${ADMIN_PASSWORD}
 
     #todo: configure, probably command argument based
     memcached:
