@@ -124,10 +124,32 @@ services:
         depends_on:
           - postgres
 
+    #todo: configure, probably command argument based
+    memcached:
+        image: memcached:${MEMCACHED_VERSION}
+        ports:
+            - ${MEMCACHED_PORT}:11211
+        networks:
+            - memcachedNet
+
+    phpmemcachedadmin:
+        build:
+            context: ./env/containers/phpmemcachedadmin
+            dockerfile: ./DockerFile
+        ports:
+            - ${PHPMEMCACHED_ADMIN_PORT}:80
+        networks:
+            - memcachedNet
+        volumes:
+            - ./env/.config/phpmemcachedadmin.conf.php:/var/www/html/Config/Memcache.php
+
+
 networks:
     appNet:
         driver: bridge
     dbNet:
+        driver: bridge
+    memcachedNet:
         driver: bridge
     postgresNet:
         driver: bridge

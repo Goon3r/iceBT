@@ -67,6 +67,19 @@ composer:
     version: latest
     command: install -v
 
+# Memcached Configuration
+#
+# version:
+#     The version of memcached to use.
+#     A Docker image tag should be provided.
+#     Tags: https://store.docker.com/images/memcached
+# port:
+#     The port this serivce will be exposed to on the hose machine.
+#     This does not affect the internal port 11211 which is used regardless.
+memcached:
+    version: 1-alpine
+    port: 11211
+
 # MySQL Configuration
 #
 # IMPORTANT: Due to limitations in the mysql data volume, root passwords, admin
@@ -126,6 +139,14 @@ pgweb:
 #     Tags: https://store.docker.com/images/php
 php:
     version: 7-fpm-alpine
+
+# PHPMemcachedAmin Configuration
+#
+# port:
+#     The port this service will be exposed to on the host machine
+#     This does not affect the internal port 80 which is used regardless.
+phpmemcachedadmin:
+    port: 8084
 
 # PHPMyAdmin Configuration
 #

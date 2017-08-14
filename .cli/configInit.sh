@@ -3,7 +3,7 @@
 # Validate required files exist
 requiredFiles=(./config.yml ./.env.dist ./env/.config/icemika.json.dist
     ./env/.config/nginx.conf.dist ./env/.config/phpredmin.php.dist
-    ./env/.config/redis.conf.dist)
+    ./env/.config/redis.conf.dist ./env/.config/phpmemcachedadmin.conf.php.dist)
 for file in "${requiredFiles[@]}"
 do
     if [ ! -f $file ]; then
@@ -22,7 +22,7 @@ requiredValues=(admin_username admin_password composer_version composer_command
  mysql_version mysql_port mysql_database nginx_version nginx_port php_version
  phpmyadmin_version phpmyadmin_port phpredmin_version phpredmin_port
  redis_version redis_port postgres_version postgres_database postgres_port
- pgweb_port)
+ pgweb_port memcached_version memcached_port phpmemcachedadmin_port)
 for i in "${requiredValues[@]}"
 do
     key=c_$i
@@ -38,6 +38,10 @@ done
 # Nginx config creation
 # - Copy dist config into usable without overwriting if one already exists.
 cp -n ./env/.config/nginx.conf.dist ./env/.config/nginx.conf
+
+# PHPMemcachedAdmin config creation
+# - Copy dist config into usable without overwriting if one already exists.
+cp -n ./env/.config/phpmemcachedadmin.conf.php.dist ./env/.config/phpmemcachedadmin.conf.php
 
 # .env token replacement
 # - Replace configuration (config.yml) values into ./.env.dist saved to ./.env
@@ -62,6 +66,9 @@ sed -e "s/{@nginx\.version}/$c_nginx_version/g" \
     -e "s/{@postgres\.database}/$c_postgres_database/g" \
     -e "s/{@postgres\.port}/$c_postgres_port/g" \
     -e "s/{@pgweb\.port}/$c_pgweb_port/g" \
+    -e "s/{@memcached\.version}/$c_memcached_version/g" \
+    -e "s/{@memcached\.port}/$c_memcached_port/g" \
+    -e "s/{@phpmemcachedadmin\.port}/$c_phpmemcachedadmin_port/g" \
      ./.env.dist > ./.env
 
 #icemika.json token replacement

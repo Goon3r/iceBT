@@ -7,8 +7,9 @@
 # Configuration files
 config.yml
 .env
-env/.config/nginx.conf
 env/.config/icemika.json
+env/.config/nginx.conf
+env/.config/phpmemcachedadmin.conf.php
 env/.config/phpredmin.php
 env/.config/redis.conf
 
