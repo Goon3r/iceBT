@@ -120,16 +120,14 @@ else
 
             .cli/configure.sh
             if [ $? -eq "0" ]; then
-                echo "Creating required services..."
-                docker-compose create --build redis postgres memcached sentry &> /dev/null
+                echo "Creating required services (this could take a while, please be patient)..."
+                docker-compose up &> /dev/null
                 echo "Starting required services..."
-                docker-compose start redis postgres memcached &> /dev/null
-                docker-compose start sentry &> /dev/null
                 docker-compose exec sentry sentry upgrade
-                echo "Cleaning up..."
-                docker-compose stop redis postgres memcached sentry &> /dev/null
-                docker-compose rm -y redis postgres memcached &> /dev/null
+                echo "Cleaning up... (this could take a while, please be patient)..."
+                docker-compose stop sentry &> /dev/null
                 docker-compose rm -v -y sentry &> /dev/null
+                docker-compose down &> /dev/null
                 echo "Success: Sentry initialisation completed."
             fi
 
